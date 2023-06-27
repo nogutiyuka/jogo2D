@@ -22,7 +22,7 @@ public class Fase extends JPanel implements KeyListener, ActionListener{
     private static final int DELAY = 5;
     private static final int VELOCIDADE_DE_DESLOCAMENTO = 3;
 
-    private static final int LARGURA_DA_JANELA = 728;
+    private static final int LARGURA_DA_JANELA = 1024;
 
     public Fase(){
         this.setFocusable(true);
