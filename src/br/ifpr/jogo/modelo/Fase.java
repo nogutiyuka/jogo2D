@@ -45,6 +45,11 @@ public class Fase extends JPanel implements KeyListener, ActionListener{
             tiro.carregar();
             graficos.drawImage(tiro.getImagem(), tiro.getPosicaoEmX(), tiro.getPosicaoEmY(), this);
         }
+        ArrayList<TiroEspecial> tirosEspeciais = personagem.getTirosEspeciais();
+        for (TiroEspecial tiroEspeciais : tirosEspeciais){
+            tiroEspeciais.carregarEspecial();
+            graficos.drawImage(tiroEspeciais.getImagem(), tiroEspeciais.getPosicaoEmX(), tiroEspeciais.getPosicaoEmY(), this);
+        }
         
         g.dispose();
     }
@@ -59,6 +64,8 @@ public class Fase extends JPanel implements KeyListener, ActionListener{
     public void keyPressed(KeyEvent e) {
     if (e.getKeyCode() == KeyEvent.VK_SPACE)
         personagem.atirar();
+    else if(e.getKeyCode() == KeyEvent.VK_Q)
+        personagem.atirarEspecial();
     else
         personagem.mover(e);
 }
@@ -77,7 +84,14 @@ public class Fase extends JPanel implements KeyListener, ActionListener{
                 tiros.remove(i);
             else
                 tiros.get(i).atualizar();
-     }
+        }
+        ArrayList<TiroEspecial> tirosEspeciais = personagem.getTirosEspeciais();
+        for (int i = 0; i < tirosEspeciais.size(); i++) {
+            if (tirosEspeciais.get(i).getPosicaoEmX() > LARGURA_DA_JANELA)
+                tirosEspeciais.remove(i);
+            else
+                tirosEspeciais.get(i).atualizarEspecial();
+        }
         repaint();
     }
 }
