@@ -13,16 +13,17 @@ public class Tiro {
     private static int VELOCIDADE = 2;
 
     public Tiro(int posicaoPersonagemEmX, int posicaoPersonagemEmY){
+        this.carregar();
         this.posicaoEmX = posicaoPersonagemEmX;
-        this.posicaoEmY = posicaoPersonagemEmY;
+        this.posicaoEmY = posicaoPersonagemEmY - (this.alturaImagem / 2);
         
     }
 
     public void carregar(){
         ImageIcon carregando = new ImageIcon("C:\\Users\\Aluno\\Desktop\\jogo 2d\\jogo2D\\Recursos\\shot.png");
         this.imagem = carregando.getImage();
-        this.alturaImagem = this.imagem.getWidth(null);
-        this.larguraImagem = this.imagem.getHeight(null);
+        this.alturaImagem = this.imagem.getHeight(null);
+        this.larguraImagem = this.imagem.getWidth(null);
     }
     
     public void atualizar(){

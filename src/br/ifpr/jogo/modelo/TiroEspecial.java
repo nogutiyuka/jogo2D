@@ -4,7 +4,8 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 
 public class TiroEspecial {
-        private int posicaoEmX;
+
+    private int posicaoEmX;
     private int posicaoEmY;
     private Image imagem;
     private int larguraImagem;
@@ -12,19 +13,21 @@ public class TiroEspecial {
     private static int VELOCIDADE = 2;
 
     public TiroEspecial(int posicaoPersonagemEmX, int posicaoPersonagemEmY){
+        this.carregarEspecial();
         this.posicaoEmX = posicaoPersonagemEmX;
         this.posicaoEmY = posicaoPersonagemEmY;
+        this.posicaoEmY = posicaoPersonagemEmY - (this.alturaImagem / 2);
         
     }
 
-    public void carregar(){
+    public void carregarEspecial(){
         ImageIcon carregando = new ImageIcon("C:\\Users\\Aluno\\Desktop\\jogo 2d\\jogo2D\\Recursos\\tequila.png");
         this.imagem = carregando.getImage();
-        this.alturaImagem = this.imagem.getWidth(null);
-        this.larguraImagem = this.imagem.getHeight(null);
+        this.alturaImagem = this.imagem.getHeight(null);
+        this.larguraImagem = this.imagem.getWidth(null);
     }
     
-    public void atualizar(){
+    public void atualizarEspecial(){
         this.posicaoEmX = this.posicaoEmX + VELOCIDADE;
     }
 

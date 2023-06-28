@@ -19,23 +19,25 @@ public class Personagem {
 
     private int velocidadeDeslocamento;
 
-    private static final int POSICAO_INICIAL_EM_X = 100;
-    private static final int POSICAO_INICIAL_EM_Y = 100;
+    private static final int POSICAO_INICIAL_EM_X = 0;
+    private static final int POSICAO_INICIAL_EM_Y = 0;
 
     private ArrayList<Tiro> tiros;
+    private ArrayList<TiroEspecial> tirosEspeciais;
     
     public Personagem(int velocidadeDeslocamento){
-        this.posicaoX = 100;
-        this.posicaoY = 100;
+        this.posicaoX = POSICAO_INICIAL_EM_X;
+        this.posicaoY = POSICAO_INICIAL_EM_Y;
         this.velocidadeDeslocamento = velocidadeDeslocamento;
         this.tiros = new ArrayList<Tiro>();
+        this.tirosEspeciais = new ArrayList<TiroEspecial>();
     }
 
     public void carregar(){
         ImageIcon carregando = new ImageIcon("C:\\Users\\Aluno\\Desktop\\jogo 2d\\jogo2D\\Recursos//hollywood-star.png");
         this.imagemPersonagem = carregando.getImage();
-        this.alturaImagem = this.imagemPersonagem.getWidth(null);
-        this.larguraImagem = this.imagemPersonagem.getHeight(null);
+        this.alturaImagem = this.imagemPersonagem.getHeight(null);
+        this.larguraImagem = this.imagemPersonagem.getWidth(null);
     }
 
     public void atualizar(){
@@ -108,9 +110,16 @@ public class Personagem {
 
     public void atirar() {
         int frenteDaNave = this.posicaoX + this.larguraImagem;
-        int meioDaNave = this.posicaoY + (this.larguraImagem / 2);
+        int meioDaNave = this.posicaoY + (this.alturaImagem /2);
         Tiro tiro = new Tiro(frenteDaNave, meioDaNave);
         this.tiros.add(tiro);
+    }
+
+    public void atirarEspecial() {
+        int frenteDaNave = this.posicaoX + this.larguraImagem;
+        int meioDaNave = this.posicaoY + (this.alturaImagem /2);
+        TiroEspecial tiroEspecial = new TiroEspecial(frenteDaNave, meioDaNave);
+        this.tirosEspeciais.add(tiroEspecial);
     }
 
     public int getPosicaoX() {
@@ -185,5 +194,12 @@ public class Personagem {
         this.tiros = tiros;
     }
 
+    public ArrayList<TiroEspecial> getTirosEspeciais() {
+        return this.tirosEspeciais;
+    }
+
+    public void setTirosEspeciais(ArrayList<TiroEspecial> tirosEspeciais) {
+        this.tirosEspeciais = tirosEspeciais;
+    }
 
 }
