@@ -24,6 +24,9 @@ public class Fase extends JPanel implements KeyListener, ActionListener{
 
     private static final int LARGURA_DA_JANELA = 1024;
 
+    private ArrayList<Inimigo> inimigos;
+    private static final int QTD_DE_INIMIGOS = 22;
+
     public Fase(){
         this.setFocusable(true);
         this.setDoubleBuffered(true);
@@ -31,6 +34,9 @@ public class Fase extends JPanel implements KeyListener, ActionListener{
         this.fundo = carregando.getImage();
         personagem = new Personagem(VELOCIDADE_DE_DESLOCAMENTO);
         personagem.carregar();
+
+        this.inicializaInimigos();
+
         addKeyListener(this);
         this.timer = new Timer(DELAY, this);
         this.timer.start();
@@ -40,18 +46,36 @@ public class Fase extends JPanel implements KeyListener, ActionListener{
         Graphics2D graficos = (Graphics2D) g;
         graficos.drawImage(fundo, 0, 0, null);
         graficos.drawImage(personagem.getImagemPersonagem(), personagem.getPosicaoX(), personagem.getPosicaoY(), this);
+        
         ArrayList<Tiro> tiros = personagem.getTiros();
         for (Tiro tiro : tiros){
             tiro.carregar();
             graficos.drawImage(tiro.getImagem(), tiro.getPosicaoEmX(), tiro.getPosicaoEmY(), this);
         }
+
         ArrayList<TiroEspecial> tirosEspeciais = personagem.getTirosEspeciais();
         for (TiroEspecial tiroEspeciais : tirosEspeciais){
             tiroEspeciais.carregarEspecial();
             graficos.drawImage(tiroEspeciais.getImagem(), tiroEspeciais.getPosicaoEmX(), tiroEspeciais.getPosicaoEmY(), this);
         }
+
+        for(Inimigo inimigo : inimigos){
+            inimigo.carregar();
+            graficos.drawImage(inimigo.getImagem(), inimigo.getPosicaoEmX(), inimigo.getPosicaoEmY(), this);
+        }
         
         g.dispose();
+    }
+
+    public void inicializaInimigos(){
+        inimigos = new ArrayList<Inimigo>();
+
+        for (int i = 0; i < QTD_DE_INIMIGOS; i++) {
+            int x = (int) (Math.random() * 8000 + 1024);
+            int y = (int) (Math.random() * 650 + 30);
+            Inimigo inimigo = new Inimigo(x, y);
+            inimigos.add(inimigo);
+        }
     }
 
     @Override
@@ -91,6 +115,12 @@ public class Fase extends JPanel implements KeyListener, ActionListener{
                 tirosEspeciais.remove(i);
             else
                 tirosEspeciais.get(i).atualizarEspecial();
+        }
+        for (int i = 0; i < inimigos.size(); i++) {
+            if (inimigos.get(i).getPosicaoEmX() < 0)
+                inimigos.remove(i);
+            else
+                inimigos.get(i).atualizar();
         }
         repaint();
     }
