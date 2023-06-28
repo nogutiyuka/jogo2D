@@ -3,8 +3,7 @@ package br.ifpr.jogo.modelo;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 
-public class TiroEspecial {
-
+public class Inimigo {
     private int posicaoEmX;
     private int posicaoEmY;
     private Image imagem;
@@ -12,24 +11,22 @@ public class TiroEspecial {
     private int alturaImagem;
     private static int VELOCIDADE = 2;
 
-    public TiroEspecial(int posicaoPersonagemEmX, int posicaoPersonagemEmY){
-        this.carregarEspecial();
-        this.posicaoEmX = posicaoPersonagemEmX;
-        this.posicaoEmY = posicaoPersonagemEmY;
-        this.posicaoEmY = posicaoPersonagemEmY - (this.alturaImagem / 2);
-        
+    public Inimigo(int xAleatorio, int yAleatorio) {
+        this.posicaoEmX = xAleatorio;
+        this.posicaoEmY = yAleatorio;
     }
 
-    public void carregarEspecial(){
-        ImageIcon carregando = new ImageIcon("C:\\Users\\Aluno\\Desktop\\jogo 2d\\jogo2D\\Recursos\\lula.png");
+    public void carregar() {
+        ImageIcon carregando = new ImageIcon("recursos\\brazilian1.png");
         this.imagem = carregando.getImage();
         this.alturaImagem = this.imagem.getHeight(null);
         this.larguraImagem = this.imagem.getWidth(null);
     }
-    
-    public void atualizarEspecial(){
-        this.posicaoEmX = this.posicaoEmX + VELOCIDADE;
+
+    public void atualizar() {
+    this.posicaoEmX = this.posicaoEmX - VELOCIDADE;
     }
+
 
     public int getPosicaoEmX() {
         return this.posicaoEmX;
@@ -70,4 +67,5 @@ public class TiroEspecial {
     public void setAlturaImagem(int alturaImagem) {
         this.alturaImagem = alturaImagem;
     }
+
 }
