@@ -2,15 +2,15 @@ package br.ifpr.jogo.principal;
 
 
 import javax.swing.JFrame;
-import br.ifpr.jogo.modelo.Fase;
+import br.ifpr.jogo.modelo.FaseUm;
 
 public class Principal extends JFrame{
 
     public Principal(){
-        Fase fase = new Fase();
+        FaseUm fase = new FaseUm();
         super.add(fase);
-        super.setTitle("FAZUÉLEN");
-        super.setSize(1024, 728);
+        super.setTitle("BLODDY GAME");
+        super.setSize(1366, 768);
         super.setLocationRelativeTo(null);
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         super.setResizable(false);
