@@ -10,6 +10,19 @@ public abstract class  ElementoGrafico {
     private int larguraImagem;
     private int alturaImagem;
 
+    private boolean ehVisivel = true;
+
+    public boolean isEhVisivel() {
+        return this.ehVisivel;
+    }
+
+    public boolean getEhVisivel() {
+        return this.ehVisivel;
+    }
+
+    public void setEhVisivel(boolean ehVisivel) {
+        this.ehVisivel = ehVisivel;
+    }
 
     public abstract void carregar();
     public abstract void atualizar();

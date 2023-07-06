@@ -30,8 +30,8 @@ public class Personagem extends ElementoGrafico{
     public void carregar(){
         ImageIcon carregando = new ImageIcon("C:\\Users\\Aluno\\Desktop\\jogo 2d\\jogo2D\\Recursos//witch.png");
         this.setImagem(carregando.getImage());
-        //this.setAltura(this.getImagem().getHeight(null));
-        //this.setLargura(this.getImagem()).getWidth(null);
+        this.setAlturaImagem(this.getImagem().getHeight(null));
+        this.setLarguraImagem(this.getImagem().getWidth(null));
     }
 
     public void atualizar(){

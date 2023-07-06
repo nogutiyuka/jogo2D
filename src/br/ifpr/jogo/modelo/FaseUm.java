@@ -2,6 +2,7 @@ package br.ifpr.jogo.modelo;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -9,21 +10,21 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.Timer;
 
-public class FaseUm extends Fase{
-    //private static final int VELOCIDADE_DE_DESLOCAMENTO = 3;
+public class FaseUm extends Fase {
+    private static final int VELOCIDADE_DE_DESLOCAMENTO = 3;
 
-    public FaseUm() { // Linha adicionada (+)
-        super(); // Chamada do construtor da classe super
+    public FaseUm() {
+        super();
         ImageIcon carregando = new ImageIcon("C:\\Users\\Aluno\\Desktop\\Jogo 2d\\jogo2D\\Recursos\\fundoo.jpg");
         fundo = carregando.getImage();
 
-        //Personagem personagem = new Personagem(VELOCIDADE_DE_DESLOCAMENTO); // + Criação do objeto Personagem
-        //personagem.carregar(); // + Carregando as informações do nosso personagem
+        personagem = new Personagem(VELOCIDADE_DE_DESLOCAMENTO);
+        personagem.carregar();
 
         this.inicializaInimigos();
 
-        timer = new Timer(DELAY, this); // + Criação do objeto Timer
-        timer.start(); // + Iniciando o nosso jogo
+        timer = new Timer(DELAY, this);
+        timer.start();
     }
 
     @Override
@@ -41,29 +42,35 @@ public class FaseUm extends Fase{
     @Override
     public void paint(Graphics g) {
         Graphics2D graficos = (Graphics2D) g;
-        graficos.drawImage(fundo, 0, 0, null);
-        graficos.drawImage(personagem.getImagem(), personagem.getPosicaoX(), personagem.getPosicaoY(), this);
 
-        // Recuperar a nossa lista de tiros (getTiros) e atribuímos para uma variável
-        // local chamada tiros.
-        ArrayList<Tiro> tiros = personagem.getTiros();
+        if (emJogo) {
+            graficos.drawImage(fundo, 0, 0, null);
+            graficos.drawImage(personagem.getImagem(), personagem.getPosicaoX(), personagem.getPosicaoY(), this);
 
-        // Criando um laço de repetição (foreach). Iremos percorrer toda a lista.
-        for (Tiro tiro : tiros) {
-            // Carregando imagem do objeto tiro pelo método carregar.
-            tiro.carregar();
-            // Desenhar o tiro na nossa tela.
-            graficos.drawImage(tiro.getImagem(), tiro.getPosicaoX(), tiro.getPosicaoY(), this);
+            ArrayList<Tiro> tiros = personagem.getTiros();
+
+            for (Tiro tiro : tiros) {
+                tiro.carregar();
+                graficos.drawImage(tiro.getImagem(), tiro.getPosicaoX(), tiro.getPosicaoY(), this);
+            }
+
+            ArrayList<TiroEspecial> tirosEspeciais = personagem.getTirosEspeciais();
+            for (TiroEspecial tiroEspecial : tirosEspeciais) {
+                tiroEspecial.carregar();
+                graficos.drawImage(tiroEspecial.getImagem(), tiroEspecial.getPosicaoX(), tiroEspecial.getPosicaoY(),
+                        this);
+            }
+
+            for (Inimigo inimigo : inimigos) {
+                inimigo.carregar();
+                graficos.drawImage(inimigo.getImagem(), inimigo.getPosicaoX(), inimigo.getPosicaoY(), this);
+            }
         }
 
-        // Criando um laço de repetição (foreach). Iremos percorrer toda a lista.
-        for (Inimigo inimigo : inimigos) {
-            // Carregando imagem do objeto inimigo pelo método carregar.
-            inimigo.carregar();
-            // Desenhar o inimigo na nossa tela.
-            graficos.drawImage(inimigo.getImagem(), inimigo.getPosicaoX(), inimigo.getPosicaoY(), this);
+        else {
+            ImageIcon fimDeJogo = new ImageIcon("C:\\Users\\Aluno\\Desktop\\Jogo 2d\\jogo2D\\Recursos\\gameOver.png");
+            graficos.drawImage(fimDeJogo.getImage(), 600, 300, null);
         }
-
         g.dispose();
     }
 
@@ -71,6 +78,8 @@ public class FaseUm extends Fase{
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE)
             personagem.atirar();
+        else if (e.getKeyCode() == KeyEvent.VK_Q)
+            personagem.atirarEspecial();
         else
             personagem.mover(e);
     }
@@ -84,37 +93,68 @@ public class FaseUm extends Fase{
     public void actionPerformed(ActionEvent e) {
         personagem.atualizar();
 
-        // Recuperar a nossa lista de tiros (getTiros) e atribuímos para uma variável
-        // local chamada tiros.
         ArrayList<Tiro> tiros = personagem.getTiros();
-
-        // Criando um laço de repetição (for). Iremos percorrer toda a lista.
         for (int i = 0; i < tiros.size(); i++) {
-            // Obter o objeto tiro da posicao i do ArrayList
             Tiro tiro = tiros.get(i);
-            // Verificar se (if) a posição do x (tiro.getPosicaoEmX()) é maior do que a
-            // largura da nossa janela
-            if (tiro.getPosicaoX() > LARGURA_DA_JANELA)
-                // Remover da lista se estiver fora do campo de visão (LARGURA_DA_JANELA)
+            if (tiro.getPosicaoX() > LARGURA_DA_JANELA || !tiro.isEhVisivel())
                 tiros.remove(tiro);
             else
-                // Atualizar a posição do tiro.
                 tiro.atualizar();
         }
-        // Criando um laço de repetição (for). Iremos percorrer toda a lista.
+
+        ArrayList<TiroEspecial> tirosEspeciais = personagem.getTirosEspeciais();
+        for (int i = 0; i < tirosEspeciais.size(); i++) {
+            TiroEspecial tiroEspecial = tirosEspeciais.get(i);
+            if (tiroEspecial.getPosicaoX() > LARGURA_DA_JANELA || !tiroEspecial.isEhVisivel())
+                tirosEspeciais.remove(i);
+            else
+                tiroEspecial.atualizar();
+        }
+
         for (int i = 0; i < this.inimigos.size(); i++) {
-            // Obter o objeto inimigo da posicao i do ArrayList
             Inimigo inimigo = this.inimigos.get(i);
-            // Verificar se (if) a posição do x (inimigo.getPosicaoEmX()) é maior do que a
-            // largura da nossa janela
-            if (inimigo.getPosicaoX() < 0)
-                // Remover da lista se estiver fora do campo de visão (0)
+            if (inimigo.getPosicaoX() < 0 || !inimigo.isEhVisivel())
                 inimigos.remove(inimigo);
             else
-                // Atualizar a posição do inimigo.
                 inimigo.atualizar();
         }
+        this.verficarColisoes();
         repaint();
     }
-}
 
+    @Override
+
+    public void verficarColisoes() {
+        Rectangle formaPersonagem = this.personagem.getRectangle();
+        for (int i = 0; i < this.inimigos.size(); i++) {
+            Inimigo inimigo = inimigos.get(i);
+            Rectangle formaInimigo = inimigo.getRectangle();
+            if (formaInimigo.intersects(formaPersonagem)) {
+                this.personagem.setEhVisivel(false);
+                inimigo.setEhVisivel(false);
+                emJogo = false;
+            }
+
+            ArrayList<Tiro> tiros = this.personagem.getTiros();
+            for (int j = 0; j < tiros.size(); j++) {
+                Tiro tiro = tiros.get(j);
+                Rectangle formaTiro = tiro.getRectangle();
+                if (formaInimigo.intersects(formaTiro)) {
+                    inimigo.setEhVisivel(false);
+                    tiro.setEhVisivel(false);
+                }
+            }
+
+            ArrayList<TiroEspecial> tirosEspeciais = this.personagem.getTirosEspeciais();
+            for (int a = 0; a < tirosEspeciais.size(); a++) {
+                TiroEspecial tiroEspecial = tirosEspeciais.get(a);
+                Rectangle formaTiroEspecial = tiroEspecial.getRectangle();
+                if (formaInimigo.intersects(formaTiroEspecial)) {
+                    inimigo.setEhVisivel(false);
+                    tiroEspecial.setEhVisivel(false);
+                }
+            }
+        }
+
+    }
+}
